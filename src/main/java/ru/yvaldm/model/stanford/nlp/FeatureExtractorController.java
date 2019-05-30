@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 @RestController
-public class MyController {
+public class FeatureExtractorController {
 
     private String modelLoc = "stanfordCRF.model";
 

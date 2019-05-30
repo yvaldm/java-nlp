@@ -8,11 +8,12 @@
         <version>2.1.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ru.mp.feature.extractor</groupId>
+
+    <groupId>com.yvaldm.feature.extractor</groupId>
     <artifactId>nlp-feature-extractor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>nlp-feature-extractor</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Text preprocessing tools NER-based feature extractor</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -34,6 +35,12 @@
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
             <version>3.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
         </dependency>
     </dependencies>
 
