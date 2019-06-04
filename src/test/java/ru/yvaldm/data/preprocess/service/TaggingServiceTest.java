@@ -2,8 +2,6 @@ package ru.yvaldm.data.preprocess.service;
 
 import org.junit.Test;
 
-import java.util.Collections;
-
 /**
  * Unit test for tagging service
  *
@@ -34,6 +32,6 @@ public class TaggingServiceTest {
                 "появится в наличии";
 
         // act
-        taggingService.mark(description, Collections.emptyMap());
+        //taggingService.mark(description, Collections.emptyMap(), null);
     }
 }

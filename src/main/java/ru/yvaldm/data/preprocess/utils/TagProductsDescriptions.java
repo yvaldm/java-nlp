@@ -9,7 +9,10 @@ import ru.yvaldm.data.preprocess.xml.ProductCatalog;
 import ru.yvaldm.data.preprocess.xml.ProductParams;
 import ru.yvaldm.data.preprocess.xml.Products;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -28,44 +31,35 @@ public class TagProductsDescriptions {
     private static final Logger log = LoggerFactory.getLogger(PreProcessFiles.class);
     private static final String PATH = "/Users/valery.yakovlev/ml/electroncs";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         TaggingService taggingService = new TaggingService();
         CatalogLoader loader = new CatalogLoader();
 
         final Path dir = Paths.get(PATH);
+        Path path = Paths.get("electronics-tagged.txt");
 
-        for (final File fileEntry : dir.toFile().listFiles()) {
-            if (!fileEntry.isDirectory()) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
 
-                log.info(fileEntry.getAbsolutePath());
-                ProductCatalog productCatalog = loader.loadCatalog(fileEntry.getAbsolutePath());
-                Products offers = productCatalog.getOffers();
+            for (final File fileEntry : dir.toFile().listFiles()) {
+                if (!fileEntry.isDirectory()) {
 
-                for (Product p : offers.getOffer()) {
+                    log.info(fileEntry.getAbsolutePath());
+                    ProductCatalog productCatalog = loader.loadCatalog(fileEntry.getAbsolutePath());
+                    Products offers = productCatalog.getOffers();
 
-                    String description = p.getDescription();
-                    List<ProductParams> params = p.getParam();
+                    for (Product p : offers.getOffer()) {
 
-//                    log.info("----");
-                    log.info(description);
-//                    printParams(params);
+                        String description = p.getDescription();
+                        List<ProductParams> params = p.getParam();
 
-                    Map<String, String> paramsMap = params.stream().collect(toMap(ProductParams::getName, ProductParams::getValue));
-                    taggingService.mark(description, paramsMap);
+                        Map<String, String> paramsMap = params.stream().collect(toMap(ProductParams::getName,
+                                                                                      ProductParams::getValue,
+                                                                                      (p1, p2) -> p1));
+                        taggingService.mark(description, paramsMap, writer);
+                    }
                 }
-
-                break; // take only first file
             }
-        }
-    }
-
-    private static void printParams(List<ProductParams> params) {
-
-        for (ProductParams param : params) {
-            String name = param.getName();
-            String value = param.getValue();
-            log.info(name + " -> " + value);
         }
     }
 }
